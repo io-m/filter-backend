@@ -19,8 +19,10 @@
     "better-sqlite3": "^11.8.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
-    "drizzle-orm": "^0.38.3",
-    "express": "^4.21.2"
+    "drizzle-orm": "^0.38.4",
+    "drizzle-orm-sqlite": "^0.16.1",
+    "express": "^4.21.2",
+    "sqlite3": "^5.1.7"
   },
   "devDependencies": {
     "@types/better-sqlite3": "^7.6.12",
