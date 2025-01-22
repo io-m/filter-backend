@@ -5,22 +5,16 @@ export const createFilterRouter = (filterHandler: FilterHandler): Router => {
   const router = Router();
   /** Write you routes here */
 
-
-  // Fetch all available modules
+  // Fetch available modules based on selected locations and units
   router.get('/modules', filterHandler.getModules);
 
-  // Fetch available units based on selected modules
+  // Fetch available units based on selected modules and locations
   router.get('/units', filterHandler.getUnits);
 
   // Fetch available locations based on selected modules and units
-  router.get('/locations', filterHandler.getLocations.bind(filterHandler));
+  router.get('/locations', filterHandler.getLocations);
 
 
-  router.post("/validate", (req, res, next) => {
-    console.log("Received request at /validate");
-    console.log("Request body:", req.body);
-    next(); // 继续到 FilterHandler.validateFilters 方法
-  }, filterHandler.validateFilters.bind(filterHandler));
   /** DO NOT TOUCH THIS ROUTE - it checks your body payload to validate whether you fetched correct filters
  * body payload type --> 
  * export interface FilterValidationRequest {

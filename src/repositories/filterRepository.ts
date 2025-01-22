@@ -14,7 +14,7 @@ export class FilterRepository {
 
   /** Fetch modules */
   async getModules(unitIds?: number[], locationIds?: number[]): Promise<Module[]> {
-    return this.db
+    const results = await this.db
       .selectDistinct({ id: modules.id, title: modules.title })
       .from(modules)
       .innerJoin(moduleUnitMapping, eq(modules.id, moduleUnitMapping.moduleId))
@@ -24,19 +24,17 @@ export class FilterRepository {
           unitIds?.length ? inArray(moduleUnitMapping.unitId, unitIds) : sql`1=1`,
           locationIds?.length ? inArray(unitLocationMapping.locationId, locationIds) : sql`1=1`
         )
-      )
-      .then((results) =>
-        results.map((result) => ({
-          id: result.id,
-          title: result.title,
-        }))
       );
-  }
 
+    return results.map((result) => ({
+      id: result.id,
+      title: result.title,
+    }));
+  }
 
   /** Fetch units */
   async getUnits(moduleIds?: number[], locationIds?: number[]): Promise<Unit[]> {
-    return this.db
+    const results = await this.db
       .selectDistinct({ id: units.id, name: units.name })
       .from(units)
       .innerJoin(moduleUnitMapping, eq(units.id, moduleUnitMapping.unitId))
@@ -46,18 +44,17 @@ export class FilterRepository {
           moduleIds?.length ? inArray(moduleUnitMapping.moduleId, moduleIds) : sql`1=1`,
           locationIds?.length ? inArray(unitLocationMapping.locationId, locationIds) : sql`1=1`
         )
-      )
-      .then((results) =>
-        results.map((result) => ({
-          id: result.id,
-          name: result.name,
-        }))
       );
+
+    return results.map((result) => ({
+      id: result.id,
+      name: result.name,
+    }));
   }
 
   /** Fetch locations */
   async getLocations(moduleIds?: number[], unitIds?: number[]): Promise<Location[]> {
-    return this.db
+    const results = await this.db
       .selectDistinct({ id: locations.id, name: locations.name })
       .from(locations)
       .innerJoin(unitLocationMapping, eq(locations.id, unitLocationMapping.locationId))
@@ -67,15 +64,13 @@ export class FilterRepository {
           moduleIds?.length ? inArray(moduleUnitMapping.moduleId, moduleIds) : sql`1=1`,
           unitIds?.length ? inArray(unitLocationMapping.unitId, unitIds) : sql`1=1`
         )
-      )
-      .then((results) =>
-        results.map((result) => ({
-          id: result.id,
-          name: result.name,
-        }))
       );
-  }
 
+    return results.map((result) => ({
+      id: result.id,
+      name: result.name,
+    }));
+  }
 
   /** Validate filter combination (kept as is) */
   async validateFilterCombination(

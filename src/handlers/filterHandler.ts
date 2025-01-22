@@ -11,20 +11,22 @@ import {
 export class FilterHandler {
   constructor(private repository: any) { }
 
-  getModules = async (req: Request, res: Response): Promise<void> => {
+  /** Get Modules */
+  getModules = async (req: Request, res: Response<ModuleResponse>): Promise<void> => {
     try {
       const moduleIds = this.parseQueryParam(req.query.moduleIds as string | string[]);
       console.log("Parsed moduleIds:", moduleIds);
 
       const modules = await this.repository.getModules(moduleIds);
-      res.json({ modules });
+      res.status(200).json({ modules });
     } catch (error) {
       console.error("Error fetching modules:", error);
-      res.status(500).json({ error: "Failed to fetch modules" });
+      res.status(500).json({ modules: [], error: "Failed to fetch modules" });
     }
   };
 
-  getUnits = async (req: Request, res: Response): Promise<void> => {
+  /** Get Units */
+  getUnits = async (req: Request, res: Response<UnitResponse>): Promise<void> => {
     try {
       const moduleIds = this.parseQueryParam(req.query.moduleIds as string | string[]);
       const unitIds = this.parseQueryParam(req.query.unitIds as string | string[]);
@@ -32,14 +34,15 @@ export class FilterHandler {
       console.log("Parsed unitIds:", unitIds);
 
       const units = await this.repository.getUnits(moduleIds, unitIds);
-      res.json({ units });
+      res.status(200).json({ units });
     } catch (error) {
       console.error("Error fetching units:", error);
-      res.status(500).json({ error: "Failed to fetch units" });
+      res.status(500).json({ units: [], errors: ["Failed to fetch units"] });
     }
   };
 
-  getLocations = async (req: Request, res: Response): Promise<void> => {
+  /** Get Locations */
+  getLocations = async (req: Request, res: Response<LocationResponse>): Promise<void> => {
     try {
       const moduleIds = this.parseQueryParam(req.query.moduleIds as string | string[]);
       const unitIds = this.parseQueryParam(req.query.unitIds as string | string[]);
@@ -47,13 +50,14 @@ export class FilterHandler {
       console.log("Parsed unitIds:", unitIds);
 
       const locations = await this.repository.getLocations(moduleIds, unitIds);
-      res.json({ locations });
+      res.status(200).json({ locations });
     } catch (error) {
       console.error("Error fetching locations:", error);
-      res.status(500).json({ error: "Failed to fetch locations" });
+      res.status(500).json({ locations: [], errors: ["Failed to fetch locations"] });
     }
   };
 
+  /** Parse Query Parameter */
   private parseQueryParam(param: string | string[]): string[] {
     if (!param) return [];
     return Array.isArray(param) ? param : param.split(",");
