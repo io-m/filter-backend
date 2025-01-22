@@ -4,6 +4,7 @@ import { Request, Response } from 'express';
 export interface Module {
   id: number;
   title: string | null;
+  errors?: string[];
 }
 
 export interface Unit {
@@ -25,14 +26,19 @@ export interface FilterValidationBody {
 // Response interfaces
 export interface ModuleResponse {
   modules: Module[];
+  error?: string;
 }
+
+
 
 export interface UnitResponse {
   units: Unit[];
+  errors?: string[];
 }
 
 export interface LocationResponse {
   locations: Location[];
+  errors?: string[];
 }
 
 export interface ValidationResponse {

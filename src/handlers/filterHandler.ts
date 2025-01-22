@@ -9,11 +9,60 @@ import {
 } from '../types';
 
 export class FilterHandler {
-  constructor(private repository: FilterRepository) {}
+  constructor(private repository: any) { }
 
-  /** HERE, you should write handlers to get modules, units and locations
-   * BE AWARE, they are inter-dependent which means some units have certain modules and some locations have multiple units
-   */
+  /** Get Modules */
+  getModules = async (req: Request, res: Response<ModuleResponse>): Promise<void> => {
+    try {
+      const moduleIds = this.parseQueryParam(req.query.moduleIds as string | string[]);
+      console.log("Parsed moduleIds:", moduleIds);
+
+      const modules = await this.repository.getModules(moduleIds);
+      res.status(200).json({ modules });
+    } catch (error) {
+      console.error("Error fetching modules:", error);
+      res.status(500).json({ modules: [], error: "Failed to fetch modules" });
+    }
+  };
+
+  /** Get Units */
+  getUnits = async (req: Request, res: Response<UnitResponse>): Promise<void> => {
+    try {
+      const moduleIds = this.parseQueryParam(req.query.moduleIds as string | string[]);
+      const unitIds = this.parseQueryParam(req.query.unitIds as string | string[]);
+      console.log("Parsed moduleIds:", moduleIds);
+      console.log("Parsed unitIds:", unitIds);
+
+      const units = await this.repository.getUnits(moduleIds, unitIds);
+      res.status(200).json({ units });
+    } catch (error) {
+      console.error("Error fetching units:", error);
+      res.status(500).json({ units: [], errors: ["Failed to fetch units"] });
+    }
+  };
+
+  /** Get Locations */
+  getLocations = async (req: Request, res: Response<LocationResponse>): Promise<void> => {
+    try {
+      const moduleIds = this.parseQueryParam(req.query.moduleIds as string | string[]);
+      const unitIds = this.parseQueryParam(req.query.unitIds as string | string[]);
+      console.log("Parsed moduleIds:", moduleIds);
+      console.log("Parsed unitIds:", unitIds);
+
+      const locations = await this.repository.getLocations(moduleIds, unitIds);
+      res.status(200).json({ locations });
+    } catch (error) {
+      console.error("Error fetching locations:", error);
+      res.status(500).json({ locations: [], errors: ["Failed to fetch locations"] });
+    }
+  };
+
+  /** Parse Query Parameter */
+  private parseQueryParam(param: string | string[]): string[] {
+    if (!param) return [];
+    return Array.isArray(param) ? param : param.split(",");
+  }
+
 
   /** DO NOT CHANGE THIS HANDLER - this one checks you provided body payload of selected filters */
   validateFilters = async (
@@ -57,4 +106,6 @@ export class FilterHandler {
       });
     }
   };
+
+
 }
