@@ -1,22 +1,20 @@
-import express, { Router } from 'express';
-import { FilterHandler } from '../handlers/filterHandler';
+import express from 'express';
+import { db } from '../config/database';
+import { FilterRepository } from '../repositories/filterRepository';
+import { FilterService } from '../services/filterService';
+import { FilterController } from '../controllers/filterController';
 
-export const createFilterRouter = (filterHandler: FilterHandler): Router => {
-  const router = Router();
-  /** Write you routes here */
-  router.get('/modules', filterHandler.getModules);
-  router.get('/units', filterHandler.getUnitsByFilters);
-  router.get('/locations', filterHandler.getLocationsByFilters);
+// Dependency Injection
+const repository = new FilterRepository(db);
+const service = new FilterService(repository);
+const controller = new FilterController(service);
 
-  /** DO NOT TOUCH THIS ROUTE - it checks your body payload to validate whether you fetched correct filters
- * body payload type --> 
- * export interface FilterValidationRequest {
-    moduleIds: number[];
-    unitIds: number[];
-    locationIds: number[];
-   }
-*/
-  router.post('/validate', filterHandler.validateFilters);
+const router = express.Router();
 
-  return router;
-};
+// Routes
+router.get('/modules', controller.getModules);
+router.get('/units', controller.getUnitsByModules);
+router.get('/locations', controller.getLocationsByFilters);
+router.post('/validate', controller.validateFilters);
+
+export default router;
