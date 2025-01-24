@@ -3,7 +3,6 @@ import cors from 'cors';
 import path from 'path';
 import swaggerUi from 'swagger-ui-express';
 import { swaggerDocs } from './config/swagger';
-import { db } from './config/database'; // Database setup
 import filterRoutes from './routes/filters'; // Filter Routes
 
 const app = express();

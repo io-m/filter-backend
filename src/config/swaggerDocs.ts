@@ -141,6 +141,93 @@ const swaggerPaths = {
       },
     },
   },
+  '/api/filters/validate': {
+    post: {
+      summary: 'Validate the selected combination of filters',
+      requestBody: {
+        required: true,
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+              properties: {
+                moduleIds: {
+                  type: 'array',
+                  items: {
+                    type: 'integer',
+                  },
+                  description: 'Array of module IDs',
+                },
+                unitIds: {
+                  type: 'array',
+                  items: {
+                    type: 'integer',
+                  },
+                  description: 'Array of unit IDs',
+                },
+                locationIds: {
+                  type: 'array',
+                  items: {
+                    type: 'integer',
+                  },
+                  description: 'Array of location IDs',
+                },
+              },
+              required: ['moduleIds', 'unitIds', 'locationIds'], // Required fields
+            },
+          },
+        },
+      },
+      responses: {
+        200: {
+          description: 'Validation result of the selected filters',
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                properties: {
+                  valid: {
+                    type: 'boolean',
+                    description: 'Whether the filter combination is valid',
+                  },
+                  errors: {
+                    type: 'array',
+                    items: {
+                      type: 'string',
+                    },
+                    description: 'List of validation errors, if any',
+                  },
+                },
+              },
+            },
+          },
+        },
+        400: {
+          description: 'Invalid request payload',
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                properties: {
+                  valid: {
+                    type: 'boolean',
+                    description: 'Always false for invalid requests',
+                  },
+                  errors: {
+                    type: 'array',
+                    items: {
+                      type: 'string',
+                    },
+                    description: 'List of errors describing what is invalid',
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  },
 };
 
 export default swaggerPaths;
