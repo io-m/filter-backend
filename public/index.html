@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin-top: 50px;
+    }
+
+    h1 {
+      color: #333;
+    }
+
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    li {
+      margin: 10px 0;
+    }
+
+    a {
+      text-decoration: none;
+      color: #007BFF;
+      font-size: 18px;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    input[type="text"] {
+      padding: 8px;
+      width: 250px;
+      font-size: 16px;
+      margin: 5px 0;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      color: #fff;
+      background-color: #007BFF;
+      border: none;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    .container {
+      margin: 20px 0;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Welcome to the Filter Backend</h1>
+  <p>Select filters to get started or view the API documentation.</p>
+
+  <!-- API Documentation Link -->
+  <ul>
+    <li><a href="/api-docs" target="_blank">View API Documentation (Swagger UI)</a></li>
+  </ul>
+
+  <!-- Fetch Modules -->
+  <ul>
+    <li><a href="/api/filters/modules">View All Modules</a></li>
+  </ul>
+
+  <!-- Fetch Units Based on Modules -->
+  <div class="container">
+    <h3>Fetch Units</h3>
+    <label for="moduleIds">Enter Module IDs (comma-separated):</label><br />
+    <input type="text" id="moduleIds" placeholder="e.g., 1,2,3" /><br />
+    <button onclick="fetchUnits()">Get Units</button>
+  </div>
+
+  <!-- Fetch Locations Based on Modules and Units -->
+  <div class="container">
+    <h3>Fetch Locations</h3>
+    <label for="moduleIdsForLocations">Enter Module IDs (comma-separated):</label><br />
+    <input type="text" id="moduleIdsForLocations" placeholder="e.g., 1,2,3" /><br />
+    <label for="unitIdsForLocations">Enter Unit IDs (comma-separated):</label><br />
+    <input type="text" id="unitIdsForLocations" placeholder="e.g., 4,5,6" /><br />
+    <button onclick="fetchLocations()">Get Locations</button>
+  </div>
+
+  <script>
+    // Fetch Units Function
+    function fetchUnits() {
+      const moduleIds = document.getElementById('moduleIds').value;
+      if (!moduleIds) {
+        alert('Please enter module IDs');
+        return;
+      }
+
+      const url = `/api/filters/units?moduleIds=[${moduleIds}]`;
+      window.location.href = url;
+    }
+
+    // Fetch Locations Function
+    function fetchLocations() {
+      const moduleIds = document.getElementById('moduleIdsForLocations').value;
+      const unitIds = document.getElementById('unitIdsForLocations').value;
+
+      if (!moduleIds || !unitIds) {
+        alert('Please enter both module IDs and unit IDs');
+        return;
+      }
+
+      const url = `/api/filters/locations?moduleIds=[${moduleIds}]&unitIds=[${unitIds}]`;
+      window.location.href = url;
+    }
+  </script>
+</body>
+
+</html>
